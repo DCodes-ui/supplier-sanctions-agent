@@ -67,6 +67,15 @@ def ingest(settings: Settings | None = None, log: Log | None = None) -> IngestRe
     active = required_ok and any(outcome.ok for outcome in outcomes)
     _store(snapshot_id, outcomes, active=active)
     if active:
+        write("indexing names")
+        try:
+            from screener.matching.index import build_index
+
+            build_index(snapshot_id, log=write)
+        except Exception:
+            _deactivate(snapshot_id)
+            write(f"snapshot {snapshot_id} was not activated")
+            return IngestResult(snapshot_id=snapshot_id, active=False, sources=outcomes)
         _write_pointer(snapshot_id)
         write(f"active snapshot {snapshot_id}")
     else:
@@ -175,6 +184,11 @@ def _insert_records(session, snapshot_id: str, parsed: ParseResult) -> None:  # 
                 mapped.entity_id = row.id
                 names.append(mapped)
         session.add_all(names)
+
+
+def _deactivate(snapshot_id: str) -> None:
+    with session_scope() as session:
+        session.execute(update(SnapshotRow).where(SnapshotRow.id == snapshot_id).values(is_active=False))
 
 
 def _write_pointer(snapshot_id: str) -> None:

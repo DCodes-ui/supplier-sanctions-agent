@@ -93,6 +93,31 @@ class IndexedNameRow(Base):
     entity: Mapped[SanctionEntityRow] = relationship(back_populates="names")
 
 
+class NameTokenRow(Base):
+    """One blocking token for a normalized name."""
+
+    __tablename__ = "name_tokens"
+    __table_args__ = (Index("ix_name_tokens_snapshot_token", "snapshot_id", "token"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    snapshot_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    token: Mapped[str] = mapped_column(String(64), nullable=False)
+    entity_id: Mapped[int] = mapped_column(ForeignKey("sanction_entities.id"), nullable=False, index=True)
+    indexed_name_id: Mapped[int] = mapped_column(ForeignKey("indexed_names.id"), nullable=False)
+
+
+class EntityIdentifierRow(Base):
+    """Registration and document numbers, reduced to letters and digits."""
+
+    __tablename__ = "entity_identifiers"
+    __table_args__ = (Index("ix_entity_identifiers_snapshot_key", "snapshot_id", "key"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    snapshot_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    entity_id: Mapped[int] = mapped_column(ForeignKey("sanction_entities.id"), nullable=False)
+    key: Mapped[str] = mapped_column(String(128), nullable=False)
+
+
 class ScreeningRow(Base):
     __tablename__ = "screenings"
 
