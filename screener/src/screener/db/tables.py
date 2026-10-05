@@ -53,7 +53,7 @@ class SanctionEntityRow(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     snapshot_id: Mapped[str] = mapped_column(ForeignKey("snapshots.id"), nullable=False, index=True)
-    source: Mapped[str] = mapped_column(String(128), nullable=False)
+    source: Mapped[str] = mapped_column(Text, nullable=False)
     list_name: Mapped[str] = mapped_column(Text, nullable=False)
     programme: Mapped[str] = mapped_column(Text, nullable=False, default="")
     source_record_id: Mapped[str] = mapped_column(String(256), nullable=False)
