@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Sanctions snapshots and the local SQLite database.
+data/
+
+screener/.venv/
+*.egg-info/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

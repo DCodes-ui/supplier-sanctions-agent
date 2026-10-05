@@ -1,0 +1,13 @@
+# Score bands for one candidate. Edit this file; matching code reads it on each load.
+# Below discard_below the candidate is dropped.
+# From discard_below up to likely_hit_at the result is review.
+# At or above likely_hit_at the result is likely_hit only when corroboration holds, otherwise review.
+discard_below: 0.72
+likely_hit_at: 0.90
+# A score at or above this counts as corroboration when the country agrees or the name is rare.
+high_confidence_at: 0.96
+# At this many distinct people with the same normalized name, never likely_hit without an exact id.
+common_name_min_people: 8
+# How many blocked candidates are rescored, and how many of those are sent to the model.
+candidate_rescore_limit: 50
+llm_candidate_limit: 5

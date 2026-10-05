@@ -1,0 +1,7 @@
+# Policy, not a sanctions designation.
+# A supplier in one of these countries with no list hit is review, evidence kind country_risk.
+countries:
+  - KP
+  - IR
+  - SY
+  - CU

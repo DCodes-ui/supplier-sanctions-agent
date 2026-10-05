@@ -1,0 +1,22 @@
+# Non-commercial project. The OpenSanctions bulk file is included on that basis.
+# A new list is another entry here, plus an adapter registered under its kind.
+sources:
+  - id: eu_fsf
+    kind: eu_fsf
+    url: https://webgate.ec.europa.eu/fsd/fsf/public/files/xmlFullSanctionsList_1_1/content?token=dG9rZW4tMjAxNw
+    required: true
+    max_bytes: 80000000
+  - id: ofac_sdn
+    kind: ofac_sdn
+    url: https://www.treasury.gov/ofac/downloads/sdn.xml
+    required: true
+    max_bytes: 80000000
+  - id: opensanctions
+    kind: opensanctions_csv
+    url: https://data.opensanctions.org/datasets/latest/sanctions/targets.simple.csv
+    required: true
+    max_bytes: 209715200
+    # Rows already stored from the official EU and OFAC adapters.
+    skip_datasets:
+      - eu_fsf
+      - us_ofac_sdn
