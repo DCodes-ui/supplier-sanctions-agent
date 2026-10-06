@@ -1,0 +1,50 @@
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "0DAY TECHNOLOGIES", "country": "RU", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "101 Light Infantry Division", "country": "MM", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "10219452 CANADA INCORPORATED", "country": "CA", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "1061st Material-Technical Support Center", "country": "RU", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "10th Research Institute of China Electronic Technology Group Corporation (CETC)", "country": "CN", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "110TH RESEARCH CENTER", "country": "KP", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "11420 CORP.", "country": "US", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "142-й батальон радиоэлектронной борьбы", "country": "RU", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "1425 BRICKELL AVE 63-F LLC", "country": "US", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "1425 BRICKELL AVENUE 64E LLC", "country": "US", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "1425 BRICKELL AVENUE UNIT 46B, LLC", "country": "US", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "148SH LIMITED TRADE DEVELOPMENT", "country": "RU", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "14th Research Institute of CETC", "country": "CN", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "15 KHORDAD FOUNDATION", "country": "IR", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "1NKEMIA IUCT GROUP, S.A.", "country": "ES", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "200G PSA HOLDINGS LLC", "country": "US", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "likely_hit", "name": "201 Research Institute", "country": "CN", "registration_number": null, "note": "exact"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "14th Research Institute of CETC UAB", "country": "CN", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "15 KHORDAD FOUNDATION UAB", "country": "IR", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "1NKEMIA IUCT GROUP, S.A. UAB", "country": "ES", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "200G PSA HOLDINGS LLC UAB", "country": "US", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "201 Research Institute UAB", "country": "CN", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "203rd Research Institute UAB", "country": "CN", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "204th Research Institute UAB", "country": "CN", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "206th Research Institute UAB", "country": "CN", "registration_number": null, "note": "legal-form"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "LLC ZIROUDEY TEKHNOLODZHIS", "country": "RU", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "101 LID", "country": "MM", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "1061st Material-Technical Support Center (MTSC) (Russia)", "country": "RU", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "10th Research Institute of China Electronic Technology Group Corp (CETC)", "country": "CN", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "LAB 110", "country": "KP", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "142nd Separate Electronic Warfare Battalion", "country": "RU", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "148SH LTD", "country": "RU", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "CETC 14", "country": "CN", "registration_number": null, "note": "alias"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "101 Infantry Division", "country": "MM", "registration_number": null, "note": "missing-middle"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "10219452 INCORPORATED", "country": "CA", "registration_number": null, "note": "missing-middle"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "1061st Support Center", "country": "RU", "registration_number": null, "note": "missing-middle"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "10th Institute of China Electronic Technology Group Corporation (CETC)", "country": "CN", "registration_number": null, "note": "missing-middle"}
+{"snapshot_id": "20261005T181636Z", "group": "positive", "expect": "flagged", "name": "110TH CENTER", "country": "KP", "registration_number": null, "note": "missing-middle"}
+{"snapshot_id": "20261005T181636Z", "group": "hard", "expect": "not_likely_hit", "name": "101", "country": "MM", "registration_number": null, "note": "substring"}
+{"snapshot_id": "20261005T181636Z", "group": "hard", "expect": "not_likely_hit", "name": "10219452", "country": "CA", "registration_number": null, "note": "substring"}
+{"snapshot_id": "20261005T181636Z", "group": "common", "expect": "review", "name": "Abdul Aziz", "country": "RU", "registration_number": null, "note": "common-name"}
+{"snapshot_id": "20261005T181636Z", "group": "common", "expect": "review", "name": "Abdul Aziz", "country": "RU", "registration_number": "ZZZ-NOT-REAL", "note": "common-name-wrong-id"}
+{"snapshot_id": "20261005T181636Z", "group": "hard", "expect": "review", "name": "Saddam Hussein", "country": "LT", "registration_number": null, "note": "country-conflict"}
+{"snapshot_id": "20261005T181636Z", "group": "negative", "expect": "clear", "name": "Northwind Timber", "country": "LT", "registration_number": null, "note": "negative"}
+{"snapshot_id": "20261005T181636Z", "group": "negative", "expect": "clear", "name": "Sventoji Glass", "country": "LT", "registration_number": null, "note": "negative"}
+{"snapshot_id": "20261005T181636Z", "group": "negative", "expect": "clear", "name": "Riga Linen Workshop", "country": "LT", "registration_number": null, "note": "negative"}
+{"snapshot_id": "20261005T181636Z", "group": "negative", "expect": "clear", "name": "Daugava Brick", "country": "LT", "registration_number": null, "note": "negative"}
+{"snapshot_id": "20261005T181636Z", "group": "negative", "expect": "clear", "name": "Saaremaa Wool", "country": "LT", "registration_number": null, "note": "negative"}
+{"snapshot_id": "20261005T181636Z", "group": "negative", "expect": "clear", "name": "Curonian Nets", "country": "LT", "registration_number": null, "note": "negative"}
+{"snapshot_id": "20261005T181636Z", "group": "negative", "expect": "clear", "name": "Zemaitija Malt", "country": "LT", "registration_number": null, "note": "negative"}

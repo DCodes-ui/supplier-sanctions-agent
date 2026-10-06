@@ -6,6 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from screener.evalset import evaluate, write_cases
 from screener.matching.index import SnapshotNotReady, active_snapshot_id, build_index
 from screener.pipeline.ingest import ingest
 from screener.pipeline.screen import (
@@ -43,6 +44,8 @@ def main(argv: list[str] | None = None) -> int:
         return _screen(rest)
     if command == "batch":
         return _batch(rest)
+    if command == "eval":
+        return _eval(rest)
     if command == "api":
         if rest:
             _usage()
@@ -68,6 +71,20 @@ def _screen(argv: list[str]) -> int:
         return 1
     _print_screen(stored)
     return 0
+
+
+def _eval(argv: list[str]) -> int:
+    try:
+        if argv == ["--write"]:
+            count = write_cases()
+            print(f"wrote {count} cases")
+        elif argv:
+            _usage()
+            return 2
+        return evaluate()
+    except (OSError, RuntimeError, FileNotFoundError) as exc:
+        print(exc, file=sys.stderr)
+        return 1
 
 
 def _batch(argv: list[str]) -> int:
@@ -116,6 +133,7 @@ def _usage() -> None:
         "  python -m screener index\n"
         "  python -m screener screen --name NAME --country CC [--registration-number ID]\n"
         "  python -m screener batch suppliers.csv\n"
+        "  python -m screener eval\n"
         "  python -m screener api",
         file=sys.stderr,
     )
