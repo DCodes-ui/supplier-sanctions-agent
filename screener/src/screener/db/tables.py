@@ -86,7 +86,6 @@ class IndexedNameRow(Base):
     raw_name: Mapped[str] = mapped_column(Text, nullable=False)
     normalized: Mapped[str] = mapped_column(Text, nullable=False, default="")
     tokens: Mapped[list[str]] = mapped_column(JSON, nullable=False)
-    phonetic_key: Mapped[str] = mapped_column(String(128), nullable=False, default="", index=True)
     is_primary: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     name_frequency: Mapped[int | None] = mapped_column(Integer, nullable=True)
 

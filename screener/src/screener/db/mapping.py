@@ -43,7 +43,6 @@ def name_row(snapshot_id: str, name: IndexedName) -> IndexedNameRow:
         raw_name=name.raw_name,
         normalized=name.normalized,
         tokens=list(name.tokens),
-        phonetic_key=name.phonetic_key,
         is_primary=name.is_primary,
         name_frequency=name.name_frequency,
     )

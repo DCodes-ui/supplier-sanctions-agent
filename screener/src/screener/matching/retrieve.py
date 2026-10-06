@@ -23,12 +23,24 @@ from screener.domain.models import Evidence, MatchedEntity, ScreeningDecision
 from screener.matching.countries import country_codes, country_relation
 from screener.matching.index import SnapshotNotReady, active_snapshot_id
 from screener.matching.normalize import name_tokens, normalize_identifier, normalize_name
-from screener.matching.phonetic import metaphone
 
-# A token shared by more names than this is too common to use as a block on its own.
+# A token shared by more names than this is too common to block on.
 _MAX_BLOCK_DF = 2000
-_PHONETIC_CAP = 100
-_TOKEN_FETCH = 1500
+# Company words. They are not enough on their own to make two names look alike.
+_GENERIC_TOKENS = {
+    "holdings",
+    "holding",
+    "group",
+    "company",
+    "international",
+    "trading",
+    "enterprises",
+    "enterprise",
+    "limited",
+    "services",
+    "corp",
+    "corporation",
+}
 
 
 @dataclass(frozen=True)
@@ -68,7 +80,13 @@ def match_supplier(
         identifier_ids = _identifier_hits(session, current, registration_number)
         if len(identifier_ids) == 1:
             return _identifier_decision(session, current, identifier_ids[0], normalized, country)
-        blocked = _block(session, current, normalized, name_tokens(normalized), metaphone(normalized))
+        blocked = _block(
+            session,
+            current,
+            normalized,
+            name_tokens(normalized),
+            loaded.thresholds.candidate_rescore_limit,
+        )
         if identifier_ids:
             blocked = _merge(identifier_ids, blocked, loaded.thresholds.candidate_rescore_limit)
         scored = _score_entities(session, normalized, country, blocked)
@@ -127,6 +145,14 @@ def _decide(snapshot_id: str, country: str, settings: Settings, candidates: list
     )
 
 
+def ceiling_status(candidate: Candidate, settings: Settings) -> str:
+    """The strongest status the score rules allow for this candidate."""
+
+    if candidate.score >= settings.thresholds.likely_hit_at and _corroborated(candidate, settings):
+        return "likely_hit"
+    return "review"
+
+
 def _corroborated(candidate: Candidate, settings: Settings) -> bool:
     if candidate.contradicts:
         return False
@@ -173,7 +199,7 @@ def _identifier_decision(session, snapshot_id: str, entity_id: int, normalized: 
         agrees=found.agrees,
         contradicts=found.contradicts,
         name_frequency=found.name_frequency,
-        tokens_covered=found.tokens_covered,
+        tokens_covered=True,
     )
     decision = _from_candidate(
         snapshot_id,
@@ -254,7 +280,9 @@ def _country_is_elevated(country: str, settings: Settings) -> bool:
     return bool(country_codes(country) & set(settings.country_risk))
 
 
-def _block(session, snapshot_id: str, normalized: str, tokens: list[str], phonetic: str) -> list[int]:  # noqa: ANN001
+def _block(session, snapshot_id: str, normalized: str, tokens: list[str], limit: int) -> list[int]:  # noqa: ANN001
+    """Exact normalized names, plus entities that share the rarest useful token."""
+
     exact = list(
         session.scalars(
             select(IndexedNameRow.entity_id).where(
@@ -263,28 +291,10 @@ def _block(session, snapshot_id: str, normalized: str, tokens: list[str], phonet
             )
         )
     )
-    ranked = _ranked_token_entities(session, snapshot_id, tokens)
-    phonetic_ids: list[int] = []
-    if phonetic:
-        phonetic_ids = list(
-            session.scalars(
-                select(IndexedNameRow.entity_id)
-                .where(
-                    IndexedNameRow.snapshot_id == snapshot_id,
-                    IndexedNameRow.phonetic_key == phonetic,
-                )
-                .limit(_PHONETIC_CAP + 1)
-            )
-        )
-        if len(phonetic_ids) > _PHONETIC_CAP:
-            phonetic_ids = []
-    return _merge(exact, [*ranked, *phonetic_ids], 50)
-
-
-def _ranked_token_entities(session, snapshot_id: str, tokens: list[str]) -> list[int]:  # noqa: ANN001
-    counts: dict[str, int] = {}
-    for token in tokens:
-        counts[token] = (
+    distinctive = [token for token in tokens if token not in _GENERIC_TOKENS]
+    found: list[int] = []
+    for token in sorted(distinctive, key=len, reverse=True):
+        count = (
             session.scalar(
                 select(func.count(func.distinct(NameTokenRow.entity_id))).where(
                     NameTokenRow.snapshot_id == snapshot_id,
@@ -293,38 +303,17 @@ def _ranked_token_entities(session, snapshot_id: str, tokens: list[str]) -> list
             )
             or 0
         )
-    usable = [token for token in tokens if 0 < counts[token] <= _MAX_BLOCK_DF]
-    usable.sort(key=lambda token: counts[token])
-    usable = usable[:3]
-    if not usable:
-        return []
-    entity_ids: set[int] = set()
-    for token in usable:
-        found = session.scalars(
-            select(NameTokenRow.entity_id)
-            .where(NameTokenRow.snapshot_id == snapshot_id, NameTokenRow.token == token)
-            .limit(_TOKEN_FETCH)
-        ).all()
-        entity_ids.update(found)
-    if not entity_ids:
-        return []
-    overlaps = session.execute(
-        select(NameTokenRow.entity_id, NameTokenRow.token).where(
-            NameTokenRow.snapshot_id == snapshot_id,
-            NameTokenRow.entity_id.in_(entity_ids),
-            NameTokenRow.token.in_(tokens),
-        )
-    ).all()
-    weights = {token: 1 / counts[token] for token in usable}
-    scores: dict[int, float] = {}
-    seen: set[tuple[int, str]] = set()
-    for entity_id, token in overlaps:
-        pair = (entity_id, token)
-        if pair in seen:
+        if count == 0 or count > _MAX_BLOCK_DF:
             continue
-        seen.add(pair)
-        scores[entity_id] = scores.get(entity_id, 0) + weights.get(token, 0)
-    return sorted(scores, key=lambda entity_id: scores[entity_id], reverse=True)
+        found = list(
+            session.scalars(
+                select(NameTokenRow.entity_id)
+                .where(NameTokenRow.snapshot_id == snapshot_id, NameTokenRow.token == token)
+                .limit(limit)
+            )
+        )
+        break
+    return _merge(exact, found, limit)
 
 
 def _score_entities(session, normalized: str, country: str, entity_ids: list[int]) -> list[Candidate]:  # noqa: ANN001
@@ -415,24 +404,6 @@ def _merge(first: list[int], second: list[int], limit: int) -> list[int]:
         if len(ordered) >= limit:
             break
     return ordered
-
-
-# Shared company words. They stay in the index for blocking, but they are not
-# enough on their own to make two different names look alike.
-_GENERIC_TOKENS = {
-    "holdings",
-    "holding",
-    "group",
-    "company",
-    "international",
-    "trading",
-    "enterprises",
-    "enterprise",
-    "limited",
-    "services",
-    "corp",
-    "corporation",
-}
 
 
 def _name_score(query: str, candidate: str) -> float:

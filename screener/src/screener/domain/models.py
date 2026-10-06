@@ -82,7 +82,6 @@ class IndexedName(StrictModel):
     raw_name: str = Field(min_length=1)
     normalized: str = ""
     tokens: list[str] = Field(default_factory=list)
-    phonetic_key: str = ""
     is_primary: bool = False
     name_frequency: int | None = Field(default=None, ge=0)
 

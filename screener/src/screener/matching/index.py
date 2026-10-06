@@ -16,7 +16,6 @@ from screener.db.tables import (
     SanctionEntityRow,
 )
 from screener.matching.normalize import name_tokens, normalize_identifier, normalize_name
-from screener.matching.phonetic import metaphone
 from screener.paths import data_dir
 
 Log = Callable[[str], None]
@@ -57,13 +56,12 @@ def build_index(snapshot_id: str, log: Log | None = None) -> None:
                 IndexedNameRow.snapshot_id == snapshot_id
             )
         ).all()
-        prepared: list[tuple[int, int, str, list[str], str]] = []
+        prepared: list[tuple[int, int, str, list[str]]] = []
         people_with_name: dict[str, set[int]] = defaultdict(set)
         for name_id, entity_id, raw_name in rows:
             normalized = normalize_name(raw_name)
             tokens = name_tokens(normalized)
-            phonetic = metaphone(normalized)
-            prepared.append((name_id, entity_id, normalized, tokens, phonetic))
+            prepared.append((name_id, entity_id, normalized, tokens))
             if normalized and entity_id in people:
                 people_with_name[normalized].add(entity_id)
         frequency = {name: len(entity_ids) for name, entity_ids in people_with_name.items()}
@@ -73,26 +71,24 @@ def build_index(snapshot_id: str, log: Log | None = None) -> None:
     write(f"indexed {len(prepared)} names")
 
 
-def _update_names(session, prepared: list[tuple[int, int, str, list[str], str]], frequency: dict[str, int]) -> None:  # noqa: ANN001
-    statement = (
-        "UPDATE indexed_names SET normalized = ?, tokens = ?, phonetic_key = ?, name_frequency = ? WHERE id = ?"
-    )
+def _update_names(session, prepared: list[tuple[int, int, str, list[str]]], frequency: dict[str, int]) -> None:  # noqa: ANN001
+    statement = "UPDATE indexed_names SET normalized = ?, tokens = ?, name_frequency = ? WHERE id = ?"
     connection = session.connection()
     payload = [
-        (normalized, json.dumps(tokens), phonetic, frequency.get(normalized, 0), name_id)
-        for name_id, _entity_id, normalized, tokens, phonetic in prepared
+        (normalized, json.dumps(tokens), frequency.get(normalized, 0), name_id)
+        for name_id, _entity_id, normalized, tokens in prepared
     ]
     for start in range(0, len(payload), _BATCH):
         connection.exec_driver_sql(statement, payload[start : start + _BATCH])
 
 
-def _insert_tokens(session, snapshot_id: str, prepared: list[tuple[int, int, str, list[str], str]]) -> None:  # noqa: ANN001
+def _insert_tokens(session, snapshot_id: str, prepared: list[tuple[int, int, str, list[str]]]) -> None:  # noqa: ANN001
     statement = (
         "INSERT INTO name_tokens (snapshot_id, token, entity_id, indexed_name_id) VALUES (?, ?, ?, ?)"
     )
     payload = [
         (snapshot_id, token[:64], entity_id, name_id)
-        for name_id, entity_id, _normalized, tokens, _phonetic in prepared
+        for name_id, entity_id, _normalized, tokens in prepared
         for token in tokens
     ]
     connection = session.connection()

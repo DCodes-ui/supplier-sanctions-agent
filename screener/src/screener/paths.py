@@ -24,6 +24,32 @@ def screener_root() -> Path:
     )
 
 
+def project_root() -> Path:
+    """Repository root, parent of the screener package directory."""
+
+    return screener_root().parent
+
+
+def load_project_env() -> None:
+    """Load KEY=VALUE lines from the repository .env file.
+
+    Existing environment variables win, so a shell export is left as-is.
+    """
+
+    path = project_root() / ".env"
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        text = line.strip()
+        if not text or text.startswith("#") or "=" not in text:
+            continue
+        key, value = text.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip("\"'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
 def data_dir() -> Path:
     """Snapshot files and screener.db. Defaults to the repository data/ directory."""
 

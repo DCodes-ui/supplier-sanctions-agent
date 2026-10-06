@@ -6,8 +6,8 @@ import argparse
 import sys
 
 from screener.matching.index import SnapshotNotReady, active_snapshot_id, build_index
-from screener.matching.retrieve import match_supplier
 from screener.pipeline.ingest import ingest
+from screener.pipeline.screen import adjudication_label, screen_supplier
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -45,11 +45,12 @@ def _screen(argv: list[str]) -> int:
     parser.add_argument("--registration-number", default=None)
     args = parser.parse_args(argv)
     try:
-        result = match_supplier(args.name, args.country, args.registration_number)
+        result = screen_supplier(args.name, args.country, args.registration_number)
     except SnapshotNotReady as exc:
         print(exc, file=sys.stderr)
         return 1
     decision = result.decision
+    print(f"adjudication: {adjudication_label(result)}")
     print(f"status: {decision.status}")
     print(f"confidence: {decision.match_confidence:.2f}")
     print(f"basis: {decision.decision_basis}")
