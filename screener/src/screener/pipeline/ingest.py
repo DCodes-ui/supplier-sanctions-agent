@@ -95,18 +95,10 @@ def _fetch_and_parse(source: SourceSpec, snapshot_dir: Path, log: Log) -> Source
     log(f"parsing {source.id}")
     try:
         parsed = _parse(source, dest)
-    except (ParseError, OSError, ValueError) as exc:
-        log(f"{source.id} failed: {exc}")
-        return _failed(
-            source,
-            str(exc),
-            http_status=status,
-            sha256=digest,
-            path=str(dest),
-        )
     except Exception as exc:
+        if not isinstance(exc, (ParseError, OSError, ValueError)):
+            traceback.print_exc()
         log(f"{source.id} failed: {exc}")
-        traceback.print_exc()
         return _failed(
             source,
             str(exc),

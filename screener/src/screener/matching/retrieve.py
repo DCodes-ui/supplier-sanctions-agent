@@ -5,7 +5,7 @@ The model is not called here. A later step may lower a likely hit to review.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from rapidfuzz import fuzz
 from rapidfuzz.distance import JaroWinkler
@@ -170,10 +170,9 @@ def _corroborated(candidate: Candidate, settings: Settings) -> bool:
     if candidate.contradicts:
         return False
     thresholds = settings.thresholds
-    rare = candidate.name_frequency < thresholds.common_name_min_people
     if candidate.name_frequency >= thresholds.common_name_min_people:
         return False
-    high = candidate.score >= thresholds.high_confidence_at and (candidate.agrees or rare)
+    high = candidate.score >= thresholds.high_confidence_at
     covered = candidate.score >= thresholds.likely_hit_at and candidate.agrees and candidate.tokens_covered
     return high or covered
 
@@ -200,20 +199,7 @@ def _identifier_decision(session, snapshot_id: str, entity_id: int, normalized: 
     if entity is None:
         raise SnapshotNotReady("The identifier index points at a missing entity.")
     found = _candidate_for_entity(entity, _names_for(session, [entity_id]).get(entity_id, []), normalized, country)
-    candidate = Candidate(
-        score=1,
-        source=found.source,
-        list_name=found.list_name,
-        programme=found.programme,
-        source_record_id=found.source_record_id,
-        name=found.name,
-        source_url=found.source_url,
-        snippet=found.snippet,
-        agrees=found.agrees,
-        contradicts=found.contradicts,
-        name_frequency=found.name_frequency,
-        tokens_covered=True,
-    )
+    candidate = replace(found, score=1, tokens_covered=True)
     decision = _from_candidate(
         snapshot_id,
         candidate,

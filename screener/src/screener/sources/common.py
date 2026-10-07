@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from screener.domain.models import IndexedName, SanctionEntity
+from screener.sources.errors import ParseError
 
 
 @dataclass
@@ -17,6 +21,37 @@ class ParsedRecord:
 class ParseResult:
     records: list[ParsedRecord]
     skipped: int
+
+
+def collect_records(
+    path: Path,
+    tag: str,
+    build: Callable[[ET.Element], ParsedRecord | None],
+    label: str,
+) -> ParseResult:
+    seen = 0
+    skipped = 0
+    records: list[ParsedRecord] = []
+    known_ids: set[str] = set()
+    try:
+        for _event, elem in ET.iterparse(path, events=("end",)):
+            if local_name(elem.tag) != tag:
+                continue
+            seen += 1
+            record = build(elem)
+            elem.clear()
+            if record is None or record.entity.source_record_id in known_ids:
+                skipped += 1
+                continue
+            known_ids.add(record.entity.source_record_id)
+            records.append(record)
+    except ET.ParseError as exc:
+        raise ParseError(f"{label} file is not valid XML: {exc}") from exc
+    if seen == 0:
+        raise ParseError(f"{label} file has no {tag} records")
+    if not records:
+        raise ParseError(f"{label} file has no usable {tag} records")
+    return ParseResult(records=records, skipped=skipped)
 
 
 def local_name(tag: str) -> str:

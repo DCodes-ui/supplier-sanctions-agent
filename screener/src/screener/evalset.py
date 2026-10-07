@@ -33,10 +33,6 @@ _NEGATIVE_NAMES = (
 )
 
 
-def cases_path():
-    return CASES_PATH
-
-
 def write_cases() -> int:
     snapshot_id = active_snapshot_id()
     cases = _build_cases(snapshot_id)
@@ -148,39 +144,56 @@ def _build_cases(snapshot_id: str) -> list[dict]:
     for entity_id, raw_name in alias_rows:
         aliases.setdefault(entity_id, raw_name)
 
-    cases: list[dict] = []
-    for entity_id, name, country, normalized in chosen[:17]:
-        cases.append(_case(snapshot_id, "positive", "likely_hit", name, country, "exact"))
-    for entity_id, name, country, normalized in chosen[12:20]:
-        cases.append(_case(snapshot_id, "positive", "flagged", f"{name} UAB", country, "legal-form"))
-    for entity_id, name, country, normalized in chosen:
-        alias = aliases.get(entity_id)
-        if alias and alias.casefold() != name.casefold():
-            cases.append(_case(snapshot_id, "positive", "flagged", alias, country, "alias"))
-        if len([case for case in cases if case["note"] == "alias"]) >= 8:
-            break
-    for entity_id, name, country, normalized in chosen:
-        tokens = name.split()
-        if len(tokens) >= 3:
-            partial = " ".join(tokens[:1] + tokens[2:])
-            cases.append(_case(snapshot_id, "positive", "flagged", partial, country, "missing-middle"))
-        if len([case for case in cases if case["note"] == "missing-middle"]) >= 5:
-            break
-    for entity_id, name, country, normalized in chosen:
-        if len(name) >= 20:
-            cases.append(_case(snapshot_id, "hard", "not_likely_hit", name.split()[0], country, "substring"))
-        if len([case for case in cases if case["note"] == "substring"]) >= 2:
-            break
+    cases = [
+        _case(snapshot_id, "positive", "likely_hit", name, country, "exact")
+        for _entity_id, name, country, _normalized in chosen[:17]
+    ]
+    cases += [
+        _case(snapshot_id, "positive", "flagged", f"{name} UAB", country, "legal-form")
+        for _entity_id, name, country, _normalized in chosen[12:20]
+    ]
 
+    def varied(kind: str, row):
+        if kind == "negative":
+            if match_supplier(row, "LT", snapshot_id=snapshot_id).decision.status != "clear":
+                return None
+            return _case(snapshot_id, "negative", "clear", row, "LT", "negative")
+        entity_id, name, country, _normalized = row
+        if kind == "alias":
+            alias = aliases.get(entity_id)
+            if not alias or alias.casefold() == name.casefold():
+                return None
+            return _case(snapshot_id, "positive", "flagged", alias, country, "alias")
+        if kind == "missing-middle":
+            tokens = name.split()
+            if len(tokens) < 3:
+                return None
+            partial = " ".join([tokens[0], *tokens[2:]])
+            return _case(snapshot_id, "positive", "flagged", partial, country, "missing-middle")
+        if len(name) < 20:
+            return None
+        return _case(snapshot_id, "hard", "not_likely_hit", name.split()[0], country, "substring")
+
+    for kind, rows, limit in (
+        ("alias", chosen, 8),
+        ("missing-middle", chosen, 5),
+        ("substring", chosen, 2),
+    ):
+        _append_until(cases, rows, kind, limit, lambda row, kind=kind: varied(kind, row))
     cases.extend(_common_cases(snapshot_id))
     cases.append(_case(snapshot_id, "hard", "review", "Saddam Hussein", "LT", "country-conflict"))
-    for name in _NEGATIVE_NAMES:
-        decision = match_supplier(name, "LT", snapshot_id=snapshot_id).decision
-        if decision.status == "clear":
-            cases.append(_case(snapshot_id, "negative", "clear", name, "LT", "negative"))
-        if len([case for case in cases if case["note"] == "negative"]) >= 8:
-            break
+    _append_until(cases, _NEGATIVE_NAMES, "negative", 8, lambda name: varied("negative", name))
     return cases
+
+
+def _append_until(cases: list[dict], rows, note: str, limit: int, build) -> None:
+    for row in rows:
+        case = build(row)
+        if case is None:
+            continue
+        cases.append(case)
+        if sum(item["note"] == note for item in cases) >= limit:
+            return
 
 
 def _common_cases(snapshot_id: str) -> list[dict]:

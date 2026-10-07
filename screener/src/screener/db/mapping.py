@@ -48,25 +48,6 @@ def name_row(snapshot_id: str, name: IndexedName) -> IndexedNameRow:
     )
 
 
-def entity_from_row(row: SanctionEntityRow) -> SanctionEntity:
-    return parse_model(
-        SanctionEntity,
-        {
-            "source": row.source,
-            "list_name": row.list_name,
-            "programme": row.programme,
-            "source_record_id": row.source_record_id,
-            "entity_type": row.entity_type,
-            "primary_name": row.primary_name,
-            "aliases": row.aliases,
-            "countries": row.countries,
-            "identifiers": row.identifiers,
-            "source_url": row.source_url,
-            "snippet": row.snippet,
-        },
-    )
-
-
 def screening_row(record: ScreeningRecord) -> ScreeningRow:
     decision = record.decision
     matched = None if decision.matched_entity is None else decision.matched_entity.model_dump()

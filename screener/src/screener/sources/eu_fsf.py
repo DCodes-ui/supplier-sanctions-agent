@@ -6,39 +6,13 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from screener.domain.models import SanctionEntity
-from screener.sources.common import ParseResult, ParsedRecord, clean, local_name, name_rows, unique
-from screener.sources.errors import ParseError
+from screener.sources.common import ParseResult, ParsedRecord, clean, collect_records, local_name, name_rows, unique
 
 LIST_NAME = "EU Financial Sanctions Files"
 
 
 def parse_eu_fsf(path: Path) -> ParseResult:
-    seen = 0
-    skipped = 0
-    records: list[ParsedRecord] = []
-    known_ids: set[str] = set()
-    try:
-        for _event, elem in ET.iterparse(path, events=("end",)):
-            if local_name(elem.tag) != "sanctionEntity":
-                continue
-            seen += 1
-            record = _entity(elem)
-            elem.clear()
-            if record is None:
-                skipped += 1
-                continue
-            if record.entity.source_record_id in known_ids:
-                skipped += 1
-                continue
-            known_ids.add(record.entity.source_record_id)
-            records.append(record)
-    except ET.ParseError as exc:
-        raise ParseError(f"EU file is not valid XML: {exc}") from exc
-    if seen == 0:
-        raise ParseError("EU file has no sanctionEntity records")
-    if not records:
-        raise ParseError("EU file has no usable sanctionEntity records")
-    return ParseResult(records=records, skipped=skipped)
+    return collect_records(path, "sanctionEntity", _entity, "EU")
 
 
 def _entity(elem: ET.Element) -> ParsedRecord | None:

@@ -1,4 +1,4 @@
-"""SQLAlchemy base shared by SQLite now and Postgres later."""
+"""SQLAlchemy base shared by SQLite"""
 
 from __future__ import annotations
 
