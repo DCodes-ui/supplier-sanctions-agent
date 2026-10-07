@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException, UploadFile
+from fastapi import FastAPI, Form, HTTPException, UploadFile
 from fastapi.responses import Response
 
 from screener.domain.models import ScreeningInput
@@ -37,14 +37,20 @@ def screen(body: ScreeningInput) -> dict:
 
 
 @app.post("/batch", response_model=None)
-async def batch(file: UploadFile, format: str = "json") -> Response | list[dict]:
+async def batch(
+    file: UploadFile,
+    source: str = Form(...),
+    format: str = "json",
+) -> Response | list[dict]:
+    if source not in {"eu_fsf", "ofac_sdn", "opensanctions"}:
+        raise HTTPException(status_code=400, detail="Choose EU, OFAC SDN, or OpenSanctions.")
     text = (await file.read()).decode("utf-8-sig")
     try:
         rows = parse_batch_csv(text)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     try:
-        stored = run_batch(rows)
+        stored = run_batch(rows, source=source)
     except SnapshotNotReady as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     if format == "csv":

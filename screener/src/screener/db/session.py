@@ -6,7 +6,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -43,7 +43,19 @@ def init_db(engine: Engine | None = None) -> Engine:
     if bound.dialect.name == "sqlite":
         data_dir().mkdir(parents=True, exist_ok=True)
     Base.metadata.create_all(bound)
+    _ensure_adjudication_column(bound)
     return bound
+
+
+def _ensure_adjudication_column(engine: Engine) -> None:
+    if engine.dialect.name != "sqlite":
+        return
+    with engine.begin() as connection:
+        rows = connection.execute(text("PRAGMA table_info(screenings)")).fetchall()
+        if rows and not any(row[1] == "adjudication" for row in rows):
+            connection.execute(
+                text("ALTER TABLE screenings ADD COLUMN adjudication VARCHAR(16) NOT NULL DEFAULT 'rules'")
+            )
 
 
 def session_factory(engine: Engine | None = None) -> sessionmaker[Session]:

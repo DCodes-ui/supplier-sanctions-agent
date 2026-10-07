@@ -132,3 +132,4 @@ class ScreeningRecord(StrictModel):
     query_country: str = Field(min_length=2)
     query_registration_number: str | None = None
     decision: ScreeningDecision
+    adjudication: str = "rules"

@@ -31,7 +31,7 @@ export default function HistoryPage() {
           <h2 className="font-medium">
             {row.query_name} · {row.query_country}
           </h2>
-          <DecisionView decision={row.decision} />
+          <DecisionView decision={row.decision} adjudication={row.adjudication} />
         </article>
       ))}
     </>

@@ -71,6 +71,7 @@ def match_supplier(
     registration_number: str | None = None,
     snapshot_id: str | None = None,
     settings: Settings | None = None,
+    source: str | None = None,
 ) -> MatchResult:
     loaded = settings or load_settings()
     current = snapshot_id or active_snapshot_id()
@@ -79,7 +80,9 @@ def match_supplier(
         _require_index(session, current)
         identifier_ids = _identifier_hits(session, current, registration_number)
         if len(identifier_ids) == 1:
-            return _identifier_decision(session, current, identifier_ids[0], normalized, country)
+            identified = _identifier_decision(session, current, identifier_ids[0], normalized, country)
+            if _on_list(identified.candidates[0].source, source):
+                return identified
         blocked = _block(
             session,
             current,
@@ -90,6 +93,8 @@ def match_supplier(
         if identifier_ids:
             blocked = _merge(identifier_ids, blocked, loaded.thresholds.candidate_rescore_limit)
         scored = _score_entities(session, normalized, country, blocked)
+    if source:
+        scored = [candidate for candidate in scored if _on_list(candidate.source, source)]
     kept = [candidate for candidate in scored if candidate.score >= loaded.thresholds.discard_below]
     kept.sort(key=lambda candidate: candidate.score, reverse=True)
     shortlist = kept[: loaded.thresholds.llm_candidate_limit]
@@ -143,6 +148,14 @@ def _decide(snapshot_id: str, country: str, settings: Settings, candidates: list
             f"The closest listed name scored {best.score:.2f}, and the country or the rarity of the name supports it."
         ),
     )
+
+
+def _on_list(candidate_source: str, selected: str | None) -> bool:
+    if not selected:
+        return True
+    if selected == "opensanctions":
+        return candidate_source.startswith("opensanctions:")
+    return candidate_source == selected
 
 
 def ceiling_status(candidate: Candidate, settings: Settings) -> str:

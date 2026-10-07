@@ -134,5 +134,6 @@ class ScreeningRow(Base):
     recommended_action: Mapped[str] = mapped_column(Text, nullable=False)
     decision_basis: Mapped[str] = mapped_column(String(32), nullable=False)
     rationale: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    adjudication: Mapped[str] = mapped_column(String(16), nullable=False, default="rules")
 
     snapshot: Mapped[SnapshotRow] = relationship(back_populates="screenings")

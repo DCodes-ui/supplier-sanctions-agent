@@ -70,13 +70,13 @@ export default function ScreenPage() {
         <button
           type="submit"
           disabled={pending}
-          className="w-fit rounded bg-zinc-950 px-3 py-1.5 text-sm text-white disabled:opacity-50"
+          className="w-fit rounded border border-white bg-zinc-950 px-3 py-1.5 text-sm text-white disabled:opacity-50"
         >
           {pending ? "Screening…" : "Screen"}
         </button>
       </form>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
-      {result ? <DecisionView decision={result.decision} /> : null}
+      {result ? <DecisionView decision={result.decision} adjudication={result.adjudication} /> : null}
     </>
   );
 }

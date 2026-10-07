@@ -22,7 +22,7 @@ const links = [
   ["/", "Screen"],
   ["/batch", "Batch"],
   ["/history", "History"],
-  ["/datasets", "Datasets"],
+  ["/info", "Info"],
 ];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

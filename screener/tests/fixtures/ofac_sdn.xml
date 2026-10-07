@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdnList xmlns="https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/XML">
+<ns0:sdnEntry xmlns:ns0="https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/XML">
+    <ns0:uid>906</ns0:uid>
+    <ns0:lastName>HAVIN BANK LIMITED</ns0:lastName>
+    <ns0:sdnType>Entity</ns0:sdnType>
+    <ns0:programList>
+      <ns0:program>CUBA</ns0:program>
+    </ns0:programList>
+    <ns0:idList>
+      <ns0:id>
+        <ns0:uid>19525</ns0:uid>
+        <ns0:idType>Company Number</ns0:idType>
+        <ns0:idNumber>01074897</ns0:idNumber>
+        <ns0:idCountry>United Kingdom</ns0:idCountry>
+      </ns0:id>
+      <ns0:id>
+        <ns0:uid>136109</ns0:uid>
+        <ns0:idType>SWIFT/BIC</ns0:idType>
+        <ns0:idNumber>HAVIGB2L</ns0:idNumber>
+      </ns0:id>
+      <ns0:id>
+        <ns0:uid>136110</ns0:uid>
+        <ns0:idType>Website</ns0:idType>
+        <ns0:idNumber>www.havanaintbank.co.uk</ns0:idNumber>
+      </ns0:id>
+      <ns0:id>
+        <ns0:uid>136111</ns0:uid>
+        <ns0:idType>Website</ns0:idType>
+        <ns0:idNumber>www.hib.uk.com</ns0:idNumber>
+      </ns0:id>
+    </ns0:idList>
+    <ns0:akaList>
+      <ns0:aka>
+        <ns0:uid>46100</ns0:uid>
+        <ns0:type>a.k.a.</ns0:type>
+        <ns0:category>strong</ns0:category>
+        <ns0:lastName>HAVANA INTERNATIONAL BANK, LTD</ns0:lastName>
+      </ns0:aka>
+    </ns0:akaList>
+    <ns0:addressList>
+      <ns0:address>
+        <ns0:uid>44386</ns0:uid>
+        <ns0:address1>4th Floor</ns0:address1>
+        <ns0:address2>189 Marsh Wall</ns0:address2>
+        <ns0:city>London</ns0:city>
+        <ns0:postalCode>E14 9SH</ns0:postalCode>
+        <ns0:country>United Kingdom</ns0:country>
+      </ns0:address>
+      <ns0:address>
+        <ns0:uid>44387</ns0:uid>
+        <ns0:address1>Edificio Atlantic, Oficina 4 H</ns0:address1>
+        <ns0:address2>Calle D No. 8 entre 1ra. y 3ra.</ns0:address2>
+        <ns0:address3>Vedado, Plaza de la Revolucion</ns0:address3>
+        <ns0:city>Havana</ns0:city>
+        <ns0:postalCode>10400</ns0:postalCode>
+        <ns0:country>Cuba</ns0:country>
+      </ns0:address>
+    </ns0:addressList>
+  </ns0:sdnEntry>
+  
+</sdnList>

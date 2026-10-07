@@ -34,6 +34,7 @@ def screen_supplier(
     registration_number: str | None = None,
     snapshot_id: str | None = None,
     settings: Settings | None = None,
+    source: str | None = None,
 ) -> ScreenResult:
     match = match_supplier(
         name,
@@ -41,6 +42,7 @@ def screen_supplier(
         registration_number,
         snapshot_id=snapshot_id,
         settings=settings,
+        source=source,
     )
     adjudication, decision = adjudicate(
         match,
@@ -64,6 +66,7 @@ def run_screen(
     registration_number: str | None = None,
     supplier_id: str | None = None,
     settings: Settings | None = None,
+    source: str | None = None,
 ) -> StoredScreen:
     supplier = ScreeningInput(
         name=name,
@@ -76,6 +79,7 @@ def run_screen(
         supplier.country,
         supplier.registration_number,
         settings=settings,
+        source=source,
     )
     record = ScreeningRecord(
         id=uuid.uuid4().hex,
@@ -85,6 +89,7 @@ def run_screen(
         query_country=supplier.country,
         query_registration_number=supplier.registration_number,
         decision=result.decision,
+        adjudication=result.adjudication,
     )
     init_db()
     with session_scope() as session:
@@ -92,7 +97,11 @@ def run_screen(
     return StoredScreen(record=record, adjudication=result.adjudication)
 
 
-def run_batch(rows: list[ScreeningInput], settings: Settings | None = None) -> list[StoredScreen]:
+def run_batch(
+    rows: list[ScreeningInput],
+    settings: Settings | None = None,
+    source: str | None = None,
+) -> list[StoredScreen]:
     return [
         run_screen(
             row.name,
@@ -100,6 +109,7 @@ def run_batch(rows: list[ScreeningInput], settings: Settings | None = None) -> l
             row.registration_number,
             row.supplier_id,
             settings=settings,
+            source=source,
         )
         for row in rows
     ]

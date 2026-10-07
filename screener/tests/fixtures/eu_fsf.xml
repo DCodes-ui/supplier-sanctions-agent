@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export xmlns="http://eu.europa.ec/fpi/fsd/export">
+<ns0:sanctionEntity xmlns:ns0="http://eu.europa.ec/fpi/fsd/export" designationDetails="" unitedNationId="" euReferenceNumber="EU.77.33" logicalId="83">
+        <ns0:remark>UNSC RESOLUTION 1483 BASIS</ns0:remark>
+        <ns0:regulation regulationType="regulation" organisationType="commission" publicationDate="2003-07-08" entryIntoForceDate="2003-07-07" numberTitle="1210/2003 (OJ L169)" programme="IRQ" logicalId="348">
+            <ns0:publicationUrl>http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF</ns0:publicationUrl>
+        </ns0:regulation>
+        <ns0:subjectType code="person" classificationCode="P" />
+        <ns0:nameAlias firstName="Tariq" middleName="Mikhail" lastName="Aziz" wholeName="Tariq Mikhail Aziz" function="Deputy Prime Minister" title="" nameLanguage="" strong="true" regulationLanguage="en" logicalId="125">
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:nameAlias>
+        <ns0:nameAlias firstName="Tarek" middleName="Mikhail" lastName="Aziz" wholeName="Tarek Mikhail Aziz" function="" title="" nameLanguage="FR" strong="true" regulationLanguage="en" logicalId="1388">
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:nameAlias>
+        <ns0:nameAlias firstName="Tarek" middleName="" lastName="Aziz" wholeName="Tarek Aziz" function="" title="" nameLanguage="FR" strong="true" regulationLanguage="en" logicalId="414">
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:nameAlias>
+        <ns0:nameAlias firstName="Tariq" middleName="" lastName="Aziz" wholeName="Tariq Aziz" function="Deputy Prime Minister" title="" nameLanguage="" strong="true" regulationLanguage="en" logicalId="124">
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:nameAlias>
+        <ns0:citizenship region="" countryIso2Code="IQ" countryDescription="IRAQ" regulationLanguage="en" logicalId="30">
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:citizenship>
+        <ns0:birthdate circa="false" calendarType="GREGORIAN" city="Baghdad" zipCode="" birthdate="1936-07-01" dayOfMonth="1" monthOfYear="7" year="1936" region="" place="" countryIso2Code="IQ" countryDescription="IRAQ" regulationLanguage="en" logicalId="90">
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:birthdate>
+        <ns0:birthdate circa="false" calendarType="GREGORIAN" city="Mosul" zipCode="" birthdate="1936-07-01" dayOfMonth="1" monthOfYear="7" year="1936" region="" place="" countryIso2Code="IQ" countryDescription="IRAQ" regulationLanguage="en" logicalId="89">
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:birthdate>
+        <ns0:identification diplomatic="false" knownExpired="false" knownFalse="false" reportedLost="false" revokedByIssuer="false" issuedBy="" latinNumber="" nameOnDocument="" number="34409/129" region="" identificationTypeCode="other" identificationTypeDescription="Other identification number" countryIso2Code="00" countryDescription="UNKNOWN" regulationLanguage="en" logicalId="1">
+            <ns0:remark>july 1997</ns0:remark>
+            <ns0:regulationSummary regulationType="regulation" publicationDate="2003-07-08" numberTitle="1210/2003 (OJ L169)" publicationUrl="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2003:169:0006:0023:EN:PDF" />
+        </ns0:identification>
+    </ns0:sanctionEntity>
+    
+</export>

@@ -1,16 +1,27 @@
 import type { Decision } from "@/lib/types";
 
-const tone: Record<Decision["status"], string> = {
+export const statusTone: Record<Decision["status"], string> = {
   clear: "bg-emerald-100 text-emerald-950",
   review: "bg-amber-100 text-amber-950",
   likely_hit: "bg-red-100 text-red-950",
 };
 
-export function DecisionView({ decision }: { decision: Decision }) {
+export function DecisionView({
+  decision,
+  adjudication,
+}: {
+  decision: Decision;
+  adjudication?: string;
+}) {
   const matched = decision.matched_entity;
   return (
     <section className="grid gap-4 rounded-lg border border-zinc-200 p-4">
-      <p className={`w-fit rounded px-2 py-1 text-sm font-semibold ${tone[decision.status]}`}>
+      {adjudication === "fallback" ? (
+        <p className="rounded bg-red-50 px-3 py-2 text-sm text-red-950">
+          The model call failed. This result was checked by the score rules, not by Grok.
+        </p>
+      ) : null}
+      <p className={`w-fit rounded px-2 py-1 text-sm font-semibold ${statusTone[decision.status]}`}>
         {decision.status}
       </p>
       <p>{decision.recommended_action}</p>

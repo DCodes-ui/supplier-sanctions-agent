@@ -85,6 +85,7 @@ def screening_row(record: ScreeningRecord) -> ScreeningRow:
         recommended_action=decision.recommended_action,
         decision_basis=decision.decision_basis,
         rationale=decision.rationale,
+        adjudication=record.adjudication,
     )
 
 
@@ -110,4 +111,5 @@ def screening_from_row(row: ScreeningRow) -> ScreeningRecord:
         query_country=row.query_country,
         query_registration_number=row.query_registration_number,
         decision=decision,
+        adjudication=row.adjudication,
     )
