@@ -18,7 +18,6 @@ from screener.db.tables import ScreeningRow, SnapshotRow, SourceFileRow
 from screener.domain.models import ScreeningDecision, ScreeningInput, ScreeningRecord
 from screener.llm.adjudicate import adjudicate, needs_model
 from screener.matching.retrieve import Candidate, match_supplier
-from screener.pipeline.ingest import ingest
 
 
 @dataclass(frozen=True)
@@ -221,13 +220,6 @@ def dataset_status(snapshot_id: str | None = None) -> dict:
                 for row in files
             ],
         }
-
-
-def refresh_datasets() -> dict:
-    result = ingest()
-    status = dataset_status(result.snapshot_id)
-    status["active"] = result.active
-    return status
 
 
 def adjudication_label(result: ScreenResult) -> str:

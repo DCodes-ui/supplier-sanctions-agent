@@ -1,4 +1,4 @@
-"""Command line for ingest, indexing, screening, and the API."""
+"""Command line for indexing, screening, and the API."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ from pathlib import Path
 
 from screener.evalset import evaluate, write_cases
 from screener.matching.index import SnapshotNotReady, active_snapshot_id, build_index
-from screener.pipeline.ingest import ingest
 from screener.pipeline.screen import (
     StoredScreen,
     parse_batch_csv,
@@ -24,12 +23,6 @@ def main(argv: list[str] | None = None) -> int:
         _usage()
         return 2
     command, rest = args[0], args[1:]
-    if command == "ingest":
-        if rest:
-            _usage()
-            return 2
-        result = ingest(log=print)
-        return 0 if result.active else 1
     if command == "index":
         if rest:
             _usage()
@@ -129,7 +122,6 @@ def _adjudication(stored: StoredScreen) -> str:
 def _usage() -> None:
     print(
         "usage:\n"
-        "  python -m screener ingest\n"
         "  python -m screener index\n"
         "  python -m screener screen --name NAME --country CC [--registration-number ID]\n"
         "  python -m screener batch suppliers.csv\n"

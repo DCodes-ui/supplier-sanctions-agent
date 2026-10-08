@@ -13,7 +13,6 @@ from screener.pipeline.screen import (
     get_screening,
     list_screenings,
     parse_batch_csv,
-    refresh_datasets,
     run_batch,
     run_screen,
     screenings_csv,
@@ -74,11 +73,6 @@ def screening(screening_id: str) -> dict:
 @app.get("/datasets")
 def datasets() -> dict:
     return dataset_status()
-
-
-@app.post("/datasets/refresh")
-def refresh() -> dict:
-    return refresh_datasets()
 
 
 def _public(stored: StoredScreen) -> dict:

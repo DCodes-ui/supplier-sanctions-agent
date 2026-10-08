@@ -30,10 +30,10 @@ class SnapshotNotReady(RuntimeError):
 def active_snapshot_id() -> str:
     path = data_dir() / "current_snapshot.txt"
     if not path.is_file():
-        raise SnapshotNotReady("No sanctions snapshot is loaded. Run: python -m screener ingest")
+        raise SnapshotNotReady("No sanctions snapshot is loaded.")
     snapshot_id = path.read_text(encoding="utf-8").strip()
     if not snapshot_id:
-        raise SnapshotNotReady("The snapshot pointer is empty. Run: python -m screener ingest")
+        raise SnapshotNotReady("The snapshot pointer is empty.")
     return snapshot_id
 
 

@@ -63,7 +63,7 @@ export default function InfoPage() {
       </section>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
       {data && !data.active ? (
-        <p className="text-sm">Lists are not loaded yet. Run ingest, then refresh this page.</p>
+        <p className="text-sm">Lists are not loaded yet.</p>
       ) : null}
       {data?.active ? (
         <>
